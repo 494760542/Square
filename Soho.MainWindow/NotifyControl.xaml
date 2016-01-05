@@ -1,0 +1,62 @@
+﻿<UserControl x:Class="SOHO.MainWindow.NotifyControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:f="clr-namespace:AxShockwaveFlashObjects;assembly=AxInterop.ShockwaveFlashObjects"
+             xmlns:from="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300" Loaded="UserControl_Loaded">
+    <Grid ShowGridLines="False" >
+        <Grid.Background>
+            <ImageBrush ImageSource="/Resources/note_black_bg.png"></ImageBrush>
+        </Grid.Background>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*"></RowDefinition>
+            <RowDefinition Height="6*"></RowDefinition>
+            <RowDefinition Height="2*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"></ColumnDefinition>
+            <ColumnDefinition Width="6*"></ColumnDefinition>
+            <ColumnDefinition Width="2*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        
+        <Grid Grid.Column="1" Grid.Row="1" ShowGridLines="False" Visibility="Collapsed" x:Name="grid_Write">
+            <Grid.Background>
+                <ImageBrush ImageSource="/Resources/home_note_bg.png"></ImageBrush>
+            </Grid.Background>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*"></RowDefinition>
+                <RowDefinition Height="7*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="8*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBlock x:Name="txt_Notice" Grid.Column="1" Grid.Row="1" FontSize="20" Foreground="#3194b1" TextWrapping="Wrap"></TextBlock>
+        </Grid>
+        <Grid Grid.Column="1" Grid.Row="1" Visibility="Collapsed" x:Name="grid_Image" >
+            <Image x:Name="NoticeImage" TouchDown="NoticeImage_TouchDown" ></Image>
+        </Grid>
+        <Grid Grid.Column="1" Grid.Row="1" Visibility="Collapsed" x:Name="grid_Video" >
+            <MediaElement x:Name="NoticeVideo" Volume="1" LoadedBehavior="Manual" TouchDown="NoticeVideo_TouchDown"></MediaElement>
+        </Grid>
+        <Grid Grid.Column="1" Grid.Row="1" Visibility="Collapsed" x:Name="grid_Flash" Panel.ZIndex="0" >
+            <WindowsFormsHost Grid.Row="1" Grid.Column="0" x:Name="WinFlash">
+                 <f:AxShockwaveFlash x:Name="Notice_Flash" ></f:AxShockwaveFlash>
+            </WindowsFormsHost>
+        </Grid>
+        <Canvas Grid.Column="2"  Panel.ZIndex="10">
+            <Image x:Name="btn_Close" TouchDown="btn_Close_TouchDown" Width="40" Height="40" 
+                   Canvas.Left="-20" Canvas.Bottom="-20" Source="/Resources/icon_Close.png" />
+        </Canvas>
+        <Popup Panel.ZIndex="10" Height="40" Width="40" IsOpen="False" HorizontalOffset="-366" VerticalOffset="236" 
+               AllowsTransparency="True"  x:Name="pup_Close">
+            <Image x:Name="btn_Close2" TouchDown="btn_Close_TouchDown" Width="40" Height="40" 
+                  Source="/Resources/icon_Close.png" />
+        </Popup>
+    </Grid>
+</UserControl>

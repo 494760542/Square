@@ -1,0 +1,267 @@
+﻿<base:BaseUserControl xmlns:company="clr-namespace:SOHO.Search"  
+             xmlns:s="http://schemas.microsoft.com/surface/2008"
+             x:Class="SOHO.Search.SearchControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:base="clr-namespace:UskyPlugsFrame.BaseShow;assembly=UskyPlugsFrame.BaseShow"
+             xmlns:WpfKb="clr-namespace:WpfKb.Controls;assembly=WpfKb"
+             mc:Ignorable="d" 
+             x:Name="SearchUserControl"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <base:BaseUserControl.Resources>
+        <Style TargetType="{x:Type Control}" x:Key="ControlBaseStyle">
+            <Setter Property="FocusVisualStyle"	
+        			Value="{x:Null}"/>
+            <Setter Property="SnapsToDevicePixels"
+        			Value="False"/>
+            <Setter Property="FontFamily"
+        			Value="Segoe360"/>
+            <Setter Property="FontWeight"
+        			Value="Normal"/>
+            <Setter Property="FontSize"
+        			Value="17"/>
+            <Setter Property="Padding"
+        			Value="6,2,10,10"/>
+            <Setter Property="MinHeight"
+        			Value="38"/>
+            <Setter Property="MinWidth"
+        			Value="38"/>
+            <Setter Property="Margin"
+        			Value="1"/>
+            <Setter Property="HorizontalContentAlignment"
+        			Value="Left"/>
+            <Setter Property="VerticalContentAlignment"
+        			Value="Top"/>
+            <Setter Property="BorderThickness"
+        			Value="2"/>
+        </Style>
+        <SolidColorBrush x:Key="ControlHitAreaBrush"   
+        		Color="#00FFFFFF"/>
+        <Style x:Key="SurfaceListBoxItemStyle1" TargetType="{x:Type s:SurfaceListBoxItem}"
+        		BasedOn="{StaticResource ControlBaseStyle}">
+            <Setter Property="Background" 
+        			Value="{DynamicResource {x:Static s:SurfaceColors.ListBoxItemForegroundBrushKey}}"/>
+            <Setter Property="Foreground" 
+        			Value="{DynamicResource {x:Static s:SurfaceColors.ListBoxItemForegroundBrushKey}}"/>
+            <Setter Property="BorderThickness" 
+        			Value="0"/>
+            <Setter Property="HorizontalContentAlignment"
+        			Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type ItemsControl}}}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type s:SurfaceListBoxItem}">
+                        <ControlTemplate.Resources>
+                            <Storyboard x:Key="Press">
+                                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00"
+        								Storyboard.TargetName="PressOverlay"
+        								Storyboard.TargetProperty="(UIElement.Opacity)">
+                                    <SplineDoubleKeyFrame KeyTime="00:00:00.1000000"
+        									Value="1" />
+                                </DoubleAnimationUsingKeyFrames>
+                            </Storyboard>
+                            <Storyboard x:Key="Release">
+                                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00"
+        								Storyboard.TargetName="PressOverlay"
+        								Storyboard.TargetProperty="(UIElement.Opacity)">
+                                    <SplineDoubleKeyFrame KeyTime="00:00:00.2500000"
+        									Value="0" />
+                                </DoubleAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </ControlTemplate.Resources>
+                        <Grid   x:Name="Grid"
+        						Background="{StaticResource ControlHitAreaBrush}"
+        						SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                            <Border  x:Name="ButtonBody"
+        							BorderThickness="{TemplateBinding BorderThickness}"
+        							BorderBrush="{TemplateBinding BorderBrush}"
+        							SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" Background="Transparent"/>
+                            <Border x:Name="PressOverlay"    
+        							Background="{DynamicResource {x:Static s:SurfaceColors.ListBoxItemBackgroundPressedBrushKey}}"
+        							Opacity="0" 
+        							SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                            <ContentPresenter   x:Name="Content"										
+        							Margin="{TemplateBinding Padding}"
+        							HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"                               					   
+        							VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+        							SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected"		  
+        							Value="True">
+                                <Setter Property="Background" 
+        								TargetName="ButtonBody" 
+        								Value="{DynamicResource {x:Static s:SurfaceColors.ListBoxItemSelectionBackgroundBrushKey}}"/>
+                                <Setter Property="Background" 
+        								TargetName="PressOverlay" 
+        								Value="{DynamicResource {x:Static s:SurfaceColors.ListBoxItemSelectionBackgroundPressedBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed"
+        							Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard Storyboard="{StaticResource Press}" />
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard Storyboard="{StaticResource Release}" />
+                                </Trigger.ExitActions>
+                                <Setter Property="Foreground"
+        								Value="{DynamicResource {x:Static s:SurfaceColors.ListBoxItemForegroundPressedBrushKey}}"/>
+                            </Trigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsEnabled"
+        									Value="False" />
+                                    <Condition Property="IsSelected"
+        									Value="True" />
+                                </MultiTrigger.Conditions>
+                                <Setter Property="Background"
+        								Value="{DynamicResource {x:Static s:SurfaceColors.ListBoxItemSelectionBackgroundDisabledBrushKey}}"
+        								TargetName="ButtonBody"/>
+                                <Setter Property="Foreground"
+        								Value="{DynamicResource {x:Static s:SurfaceColors.ListBoxItemForegroundDisabledBrushKey}}"/>
+                                <Setter Property="Opacity"
+        								TargetName="Content"
+        								Value="0.6"/>
+                            </MultiTrigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition  Property="IsEnabled"
+        									Value="False" />
+                                    <Condition Property="IsSelected"
+        									Value="False" />
+                                </MultiTrigger.Conditions>
+                                <Setter Property="Background"
+        								Value="{DynamicResource {x:Static s:SurfaceColors.ListBoxItemBackgroundDisabledBrushKey}}"
+        								TargetName="ButtonBody"/>
+                                <Setter Property="Foreground"
+        								Value="{DynamicResource {x:Static s:SurfaceColors.ListBoxItemForegroundDisabledBrushKey}}"/>
+                                <Setter Property="Opacity"
+        								TargetName="Content"
+        								Value="0.33"/>
+                            </MultiTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="ListViewItemStyle" TargetType="{x:Type ListViewItem}">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+    </base:BaseUserControl.Resources>
+    <Grid >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="8*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.2*"></RowDefinition>
+            <RowDefinition Height="7.8*"></RowDefinition>
+            <RowDefinition Height="0.2*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <company:CompanyChild  x:Name="SearchCompany" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" Grid.RowSpan="3"
+                               Visibility="Collapsed"/>
+        <Grid Grid.Column="1" Grid.Row="1" x:Name="grid_Company">
+            <Grid.Background>
+                <ImageBrush ImageSource="/Resources/service_searchbg.png"></ImageBrush>
+            </Grid.Background>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="5.5*"></RowDefinition>
+                <RowDefinition Height="1.5*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="8*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="8*"></ColumnDefinition>
+                    <ColumnDefinition Width="15.35*"></ColumnDefinition>
+                    <ColumnDefinition Width="0.5*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="3*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid Grid.Column="1" Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2.75*"></ColumnDefinition>
+                        <ColumnDefinition Width="5*"></ColumnDefinition>
+                        <ColumnDefinition Width="0.25*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <!--<Label Content="返回"  FontSize="35" Grid.Column="0" Foreground="#0f729b"></Label>-->
+                    <TextBlock Text="请填写部门的首字母进行查找" Foreground="#0f729b" VerticalAlignment="Top" Grid.Column="1"></TextBlock>
+                    <Grid Grid.Column="1">
+                        <s:SurfaceTextBox Background="Transparent"   BorderBrush="#0f729b" Foreground="#0f729b" FontSize="18" VerticalContentAlignment="Center"  Height="33"  
+                                          PreviewTouchDown="SurfaceTextBox_TouchDown" x:Name="txt_Condition" KeyDown="txt_Condition_KeyDown"  InputMethod.IsInputMethodEnabled="False" TextChanged="txt_Condition_TextChanged">
+                           
+                        </s:SurfaceTextBox>
+                    </Grid>
+
+                    <s:SurfaceButton Grid.Column="3" x:Name="but_Enter" Height="33" Click="but_Enter_Click">
+                        <s:SurfaceButton.Background>
+                            <ImageBrush ImageSource="/Resources/remove.png" Stretch="Fill" ></ImageBrush>
+                        </s:SurfaceButton.Background>
+                    </s:SurfaceButton>
+                </Grid>
+            </Grid>
+            <Grid Grid.Row="1" Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1.5*"></ColumnDefinition>
+                    <ColumnDefinition Width="5.5*"></ColumnDefinition>
+                    <ColumnDefinition Width="1.5*"></ColumnDefinition>
+                    <ColumnDefinition Width="1.5*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Label Content="楼  栋" Grid.Column="0" HorizontalAlignment="Left" Foreground="#0f729b" FontSize="26"/>
+                <Label Content="部门 名 称" Grid.Column="1" HorizontalAlignment="Center" Foreground="#0f729b" FontSize="26"></Label>
+                <Label Content="楼  层" Grid.Column="2" HorizontalAlignment="Center" Foreground="#0f729b" FontSize="26"/>
+                <Label Content="单  元" Grid.Column="3" HorizontalAlignment="Right" Foreground="#0f729b" FontSize="26"/>
+            </Grid>
+            <Grid Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="3">
+                <s:SurfaceListBox Name="listbox_Search" ItemContainerStyle="{DynamicResource SurfaceListBoxItemStyle1}"  Panel.ZIndex="2" 
+                                  SelectionChanged="listbox_Search_SelectionChanged">
+                    <s:SurfaceListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Height="50" Width="1310">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1.5*"></ColumnDefinition>
+                                    <ColumnDefinition Width="5.5*"></ColumnDefinition>
+                                    <ColumnDefinition Width="1.5*"></ColumnDefinition>
+                                    <ColumnDefinition Width="1.5*"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <!--<TextBlock Grid.Column="0" Text="{Binding CompanyBuild}" Background="Transparent"  FontSize="20" Foreground="#0f729b" FontFamily="Microsoft YaHei"></TextBlock>-->
+                                <TextBlock Grid.Column="0" Text="本栋" Background="Transparent"  FontSize="20" Foreground="#0f729b" FontFamily="Microsoft YaHei"></TextBlock>
+                                <StackPanel Orientation="Vertical" Grid.Column="1" HorizontalAlignment="Left">
+                                    <TextBlock Text="{Binding CompanyName_CN}" Background="Transparent"  FontSize="20" Foreground="#0f729b" FontFamily="Microsoft YaHei"></TextBlock>
+                                    <TextBlock Text="{Binding CompanyName_EN}" Background="Transparent"  FontSize="15" Foreground="#0f729b" FontFamily="Microsoft YaHei"></TextBlock>
+                                </StackPanel>
+                                <TextBlock Grid.Column="2" Text="{Binding CompanyFloor}" Background="Transparent"  FontSize="20" Foreground="#0f729b" FontFamily="Microsoft YaHei"></TextBlock>
+                                <TextBlock Grid.Column="3" Text="{Binding CompanyRoomNum}" Background="Transparent"  FontSize="20" Foreground="#0f729b" FontFamily="Microsoft YaHei"
+                                           HorizontalAlignment="Center"></TextBlock>
+                            </Grid>
+                        </DataTemplate>
+                    </s:SurfaceListBox.ItemTemplate>
+                </s:SurfaceListBox>
+
+            </Grid>
+
+
+        </Grid>
+        <WpfKb:FloatingTouchScreenKeyboard
+            x:Name="Keyboard"
+            IsOpen="False"
+            Width="900" Height="400"
+            PlacementTarget="{Binding ElementName=SearchUserControl}"
+            Placement="Center"
+            AreAnimationsEnabled="True"
+            />
+    </Grid>
+</base:BaseUserControl>
